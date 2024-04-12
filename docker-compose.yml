@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  postgres:
+    container_name: "tasks_postgres"
+    image: postgres:14
+    env_file:
+      - ./postgres/postgres.env
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+      - ./postgres/entrypoint:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 15466:5432
+    networks:
+      - task_pgpro
+  load:
+    container_name: "tasks_postgres_load"
+    image: ubuntu
+    command: >
+      bash -c "apt update && apt install -y curl postgresql-client
+      && curl -L https://nextcloud.postgrespro.ru/s/BqFpNPNnFDG9SrY/download/stackexchange.sql.gz --output stackexchange.sql.gz
+      && gzip -fd stackexchange.sql.gz
+      && psql -h postgres -Upostgres < stackexchange.sql"
+    networks:
+      - task_pgpro
+  metabase:
+    container_name: "interview_metabase"
+    image: metabase/metabase
+    env_file:
+        - ./metabase/metabase.env
+    networks:
+        - task_pgpro
+    ports:
+      - 13030:3000
+
+volumes:
+  postgres_volume:
+
+networks:
+    task_pgpro:
