@@ -1,14 +1,15 @@
 ## test-env
 
-### Улучшить время выполнения следующего запроса  
+### Улучшить время выполнения следующего запроса    
 
 EXPLAIN ANALYZE VERBOSE  
-SELECT body     
-FROM posts     
-WHERE body ILIKE '%postgres%awesome%'   
-OR body ILIKE '%postgres%amazing%';
+SELECT body       
+FROM posts       
+WHERE body ILIKE '%postgres%awesome%'     
+OR body ILIKE '%postgres%amazing%'; 
+
                                                 QUERY PLAN                                                            
---------------------------------------------------------------------------------------------------------  
+--    
  Gather  (cost=1000.00..29376.86 rows=44 width=829) (actual time=183.030..2755.678 rows=40 loops=1)  
    Output: body  
    Workers Planned: 2  
@@ -30,18 +31,20 @@ OR body ILIKE '%postgres%amazing%';
 
 Посмотрим общую информацию о таблицах:  
 
-interview=# \dt  
->        List of relations  
-Schema |     Name     | Type  |  Owner     
--------|--------------|-------|----------  
-public | badges       | table | postgres  
-public | comments     | table | postgres  
-public | post_history | table | postgres  
-public | post_links   | table | postgres  
-public | posts        | table | postgres  
-public | tags         | table | postgres  
-public | users        | table | postgres  
-public | votes        | table | postgres  
+interview=# \dt 
+
+        List of relations  
+        
+Schema  |     Name      | Type  |  Owner     
+------- |-------------- |-------|----------  
+public  | badges        | table | postgres  
+public  | comments      | table | postgres  
+public  | post_history  | table | postgres  
+public  | post_links    | table | postgres  
+public  | posts         | table | postgres  
+public  | tags          | table | postgres  
+public  | users         | table | postgres  
+public  | votes         | table | postgres  
 (8 rows)  
 
 Посмотрим на таблицу posts:
@@ -49,7 +52,7 @@ public | votes        | table | postgres
 interview=# \d posts  
                             Table "public.posts"  
           Column          |            Type             | Collation | Nullable |                Default              
---------------------------+-----------------------------+-----------+----------+-----------------------------------  
+------------------------- | --------------------------- | --------- | -------- | ----------------------------------  
  id                       | integer                     |           | not null | nextval('posts_id_seq'::regclass)  
  owner_user_id            | integer                     |           |          |   
  last_editor_user_id      | integer                     |           |          |   
@@ -81,7 +84,7 @@ interview=# SELECT max(length(body))
 FROM posts;
   
 max   
--------   
+--   
  53338  
 (1 row)  
   
@@ -119,9 +122,10 @@ interview=# EXPLAIN ANALYZE VERBOSE
 SELECT body      
 FROM posts  
 WHERE body ILIKE '%postgres%awesome%'   
-OR body ILIKE '%postgres%amazing%';   
+OR body ILIKE '%postgres%amazing%';  
+
                                 QUERY PLAN                                                         
-------  
+--  
  Bitmap Heap Scan on public.posts  (cost=296.35..467.68 rows=44 width=829) (actual time=15.567..24.971 rows=40 loops=1)  
    Output: body  
    Recheck Cond: ((posts.body ~* '%postgres%awesome%'::text) OR (posts.body ~* '%postgres%amazing%'::text))  
@@ -162,8 +166,9 @@ SELECT body
 FROM posts       
 WHERE body ILIKE '%postgres%awesome%'    
 OR body ILIKE '%postgres%amazing%';  
-                                QUERY PLAN                                              
------  
+
+                                QUERY PLAN                                                
+--    
  Gather  (cost=1000.00..29376.86 rows=44 width=829)  
    Workers Planned: 2  
    ->  Parallel Seq Scan on posts  (cost=0.00..28372.46 rows=18 width=829)  
@@ -179,15 +184,16 @@ FROM pg_settings
 WHERE name IN ('max_parallel_workers_per_gather',   
                'max_worker_processes',  
                'max_parallel_workers',
-               'max_parallel_maintenance_workers');  
-              name               | setting   
----------------------------------+---------  
- max_parallel_workers            | 8  
- max_parallel_workers_per_gather | 2  
- max_worker_processes            | 8  
-(3 rows)  
+               'max_parallel_maintenance_workers');
+               
+              name               | setting     
+-------------------------------- | --------    
+ max_parallel_workers            | 8    
+ max_parallel_workers_per_gather | 2    
+ max_worker_processes            | 8    
+(3 rows)    
 
-Time: 2.435 ms  
+Time: 2.435 ms   
 
 Увеличим значение параметра `max_parallel_workers_per_gather`:  
  
@@ -198,8 +204,9 @@ Time: 13.836 ms
 Перезагрузим конфигурацию для применения изменений:  
 
 interview=# SELECT pg_reload_conf();  
- pg_reload_conf  
-----------------  
+ pg_reload_conf   
+ 
+--  
  t  
 (1 row)  
 
