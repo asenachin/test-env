@@ -1,14 +1,14 @@
-## test-env
+## test-env  
 
-### Улучшить время выполнения следующего запроса  
+### Улучшить время выполнения следующего запроса    
 
->```EXPLAIN ANALYZE VERBOSE```  
-```SELECT body```       
-```FROM posts```       
-```WHERE body ILIKE '%postgres%awesome%'```     
-```OR body ILIKE '%postgres%amazing%';```  
+>```EXPLAIN ANALYZE VERBOSE```    
+```SELECT body```         
+```FROM posts```         
+```WHERE body ILIKE '%postgres%awesome%'```       
+```OR body ILIKE '%postgres%amazing%';```    
 
-                            QUERY PLAN                              
+                            QUERY PLAN                               
 ---    
  Gather  (cost=1000.00..29376.86 rows=44 width=829) (actual time=183.030..2755.678 rows=40 loops=1)  
    Output: body  
@@ -49,36 +49,37 @@ public  | votes         | table  | postgres
 
 2.2 Таблица posts
 
->```interview=# \d posts```
-  
-                            Table "public.posts"  
-          Column          |            Type             | Collation | Nullable |                Default              
-------------------------- | --------------------------- | --------- | -------- | ----------------------------------  
- id                       | integer                     |           | not null | nextval('posts_id_seq'::regclass)  
- owner_user_id            | integer                     |           |          |   
- last_editor_user_id      | integer                     |           |          |   
- post_type_id             | smallint                    |           | not null |   
- accepted_answer_id       | integer                     |           |          |   
- score                    | integer                     |           | not null |   
- parent_id                | integer                     |           |          |   
- view_count               | integer                     |           |          |  
- answer_count             | integer                     |           |          | 0  
- comment_count            | integer                     |           |          | 0  
- owner_display_name       | character varying(64)       |           |          |  
- last_editor_display_name | character varying(64)       |           |          |   
- title                    | character varying(512)      |           |          |   
- tags                     | character varying(512)      |           |          |  
- content_license          | character varying(64)       |           | not null |   
- body                     | text                        |           |          |   
- favorite_count           | integer                     |           |          |   
- creation_date            | timestamp without time zone |           | not null |   
- community_owned_date     | timestamp without time zone |           |          |  
- closed_date              | timestamp without time zone |           |          |  
- last_edit_date           | timestamp without time zone |           |          |   
- last_activity_date       | timestamp without time zone |           |          |   
+>```interview=# \d posts```  
 
-Indexes:   
-    "posts_pkey" PRIMARY KEY, btree (id)   
+
+                            Table "public.posts"  
+          Column          |            Type             | Collation | Nullable |                Default                
+------------------------- | --------------------------- | --------- | -------- | ----------------------------------     
+ id                       | integer                     |           | not null | nextval('posts_id_seq'::regclass)     
+ owner_user_id            | integer                     |           |          |     
+ last_editor_user_id      | integer                     |           |          |     
+ post_type_id             | smallint                    |           | not null |     
+ accepted_answer_id       | integer                     |           |          |     
+ score                    | integer                     |           | not null |     
+ parent_id                | integer                     |           |          |     
+ view_count               | integer                     |           |          |    
+ answer_count             | integer                     |           |          | 0    
+ comment_count            | integer                     |           |          | 0    
+ owner_display_name       | character varying(64)       |           |          |    
+ last_editor_display_name | character varying(64)       |           |          |     
+ title                    | character varying(512)      |           |          |     
+ tags                     | character varying(512)      |           |          |    
+ content_license          | character varying(64)       |           | not null |     
+ body                     | text                        |           |          |     
+ favorite_count           | integer                     |           |          |     
+ creation_date            | timestamp without time zone |           | not null |     
+ community_owned_date     | timestamp without time zone |           |          |    
+ closed_date              | timestamp without time zone |           |          |    
+ last_edit_date           | timestamp without time zone |           |          |     
+ last_activity_date       | timestamp without time zone |           |          |     
+
+Indexes:     
+    "posts_pkey" PRIMARY KEY, btree (id)     
 
 2.3 Максимальная длина поля body 
 
